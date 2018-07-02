@@ -1,3 +1,5 @@
+This project is a fork of namespace-ee/react-calendar-timeline.
+
 # React Calendar Timeline
 
 A modern and responsive react timeline component.
