@@ -82,6 +82,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseLeave: PropTypes.func,
     onCanvasMouseMove: PropTypes.func,
     onZoom: PropTypes.func,
+    onHeaderClick: PropTypes.func,
 
     moveResizeValidator: PropTypes.func,
 
@@ -202,6 +203,7 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseLeave: null,
     onCanvasMouseMove: null,
     onZoom: null,
+    onHeaderClick: null,
 
     moveResizeValidator: null,
 
@@ -568,14 +570,21 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   showPeriod = (from, unit) => {
+    if (this.props.onHeaderClick) {
+      this.props.onHeaderClick(from, unit)
+      return
+    }
     let visibleTimeStart = from.valueOf()
     let visibleTimeEnd = moment(from)
       .add(1, unit)
       .valueOf()
     let zoom = visibleTimeEnd - visibleTimeStart
 
-    // can't zoom in more than to show one hour
-    if (zoom < 360000) {
+    // Prevent zoom beyond minZoom
+    if (zoom < this.props.minZoom) {
+      return
+    }
+    if (zoom > this.props.maxZoom) {
       return
     }
 
